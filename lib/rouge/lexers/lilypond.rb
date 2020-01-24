@@ -22,9 +22,17 @@ module Rouge
         simultaneous tempo type unset with
       )
 
+      keywords_on_off = %w(
+        cadenza shift sostenuto sustain
+      )
+
+      keywords_up_down_neutral = %w(
+        arpeggio dots dynamic phrasingSlur slur stem tie tuplet
+      )
+
       keywords_other = %w(
-        bar clef glissando key language major minor once relative remove
-        Score time times version
+        bar clef glissando key language major minor omit once relative remove
+        Score Staff time times version
       )
 
       state :root do
@@ -33,6 +41,8 @@ module Rouge
 
         rule %r/\\(new)\b/, Keyword::Declaration
         rule %r/\\(?:#{keywords_tokens.join('|')})\b/, Keyword::Reserved
+        rule %r/\\(?:#{keywords_on_off.join('|')})O(n|ff)\b/, Keyword::Reserved
+        rule %r/\\(?:#{keywords_up_down_neutral.join('|')})(Up|Down|Neutral)\b/, Keyword::Reserved
         rule %r/\\(?:#{keywords_other.join('|')})\b/, Keyword::Reserved
         rule %r/\\\w+\b/, Keyword
 
