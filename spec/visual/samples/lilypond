@@ -4,6 +4,14 @@
 \header {
   title     = "Twinkle, twinkle, little star"
   copyright = "Public domain"
+  tagline = ##f
+}
+
+\paper {
+  #(set-paper-size "a4")
+  between-system-space = 5\mm
+  between-system-padding = #1
+  ragged-bottom = ##f
 }
 
 \relative c'' {
@@ -11,4 +19,17 @@
   \time 2/4
   g8 g d' d e e d4
   c8 c h h a a g4
+  d'8 d c c h h a ~ a
+  d d c c h h a ~ a
+  g8 g d' d e e d4
+  c8 c h h a a g4
+  \bar "|."
+}
+\addlyrics {
+  Twin -- kle, twin -- kle, lit -- tle star,
+  How I won -- der what you are!
+  Up a -- bove the world so high,
+  Like a dia -- mond in the sky.
+  Twin -- kle, twin -- kle, lit -- tle star,
+  How I won -- der what you are!
 }
