@@ -49,6 +49,7 @@ module Rouge
         rule %r/[\[\]\{\}\(\)',\/<>]/, Punctuation # TODO split rule
 
         rule %r/".*?"/, Str::Double
+        rule %r(##[tf]\b), Keyword::Constant
         rule %r/[a-z]\w*/i, Name
         rule %r/[+\-]?\d+(\.\d+)?/, Num
         rule %r/\s+/m, Text::Whitespace
