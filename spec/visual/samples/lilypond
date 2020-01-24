@@ -1,0 +1,14 @@
+\version "2.18.2"
+\language "deutsch"
+
+\header {
+  title     = "Twinkle, twinkle, little star"
+  copyright = "Public domain"
+}
+
+\relative c'' {
+  \key g \major
+  \time 2/4
+  g8 g d' d e e d4
+  c8 c h h a a g4
+}

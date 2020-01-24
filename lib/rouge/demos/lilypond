@@ -1,0 +1,7 @@
+\version "2.18.2"
+% Twinkle twinkle little star
+\relative c' {
+  \time 2/4
+  c8 c g' g a a g4
+  f8 f e e d d c4
+}
