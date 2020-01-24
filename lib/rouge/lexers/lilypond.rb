@@ -50,7 +50,7 @@ module Rouge
 
         rule %r/".*?"/, Str::Double
         rule %r/[a-z]\w*/i, Name
-        rule %r/\d+/, Num
+        rule %r/[+\-]?\d+(\.\d+)?/, Num
         rule %r/\s+/m, Text::Whitespace
       end
     end
