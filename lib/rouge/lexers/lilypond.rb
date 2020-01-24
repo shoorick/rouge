@@ -11,20 +11,32 @@ module Rouge
       filenames '*.ly'
       mimetypes 'text/x-lilypond'
 
-      keywords = %w(
-        bar clef context glissando key language layout lyricmode lyricsto major
-        midi minor new once override paper relative remove score Score set time
-        times version with
+      # see LilyPond source: lily/parser.yy
+      # Keyword tokens with plain escaped name
+      keywords_tokens = %w(
+        accepts addlyrics alias alternative book bookpart change chordmode
+        chords consists context default defaultchild denies description
+        drummode drums etc figuremode figures header version-error layout
+        lyricmode lyrics lyricsto markup markuplist midi name notemode override
+        paper remove repeat rest revert score score-lines sequential set
+        simultaneous tempo type unset with
+      )
+
+      keywords_other = %w(
+        bar clef glissando key language major minor once relative remove
+        Score time times version
       )
 
       state :root do
         rule %r/%.*$/,       Comment::Single
         rule %r/%\{.*?\}%/m, Comment::Multiline
 
-        rule %r/\\(?:#{keywords.join('|')})\b/, Keyword::Reserved
+        rule %r/\\(new)\b/, Keyword::Declaration
+        rule %r/\\(?:#{keywords_tokens.join('|')})\b/, Keyword::Reserved
+        rule %r/\\(?:#{keywords_other.join('|')})\b/, Keyword::Reserved
         rule %r/\\\w+\b/, Keyword
 
-        rule %r/[\[\]\{\}\(\)',\/]/, Punctuation # TODO split rule
+        rule %r/[\[\]\{\}\(\)',\/<>]/, Punctuation # TODO split rule
 
         rule %r/".*?"/, Str::Double
         rule %r/[a-z]\w*/i, Name
