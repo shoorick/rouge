@@ -51,7 +51,7 @@ module Rouge
         rule %r/".*?"/, Str::Double
         rule %r(##[tf]\b), Keyword::Constant
         rule %r/[a-z]\w*/i, Name
-        rule %r/[+\-]?\d+(\.\d+)?/, Num
+        rule %r/#?[+\-]?\d+(\.\d+)?/, Num
         rule %r/\s+/m, Text::Whitespace
       end
     end
