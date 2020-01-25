@@ -33,7 +33,13 @@ describe Rouge::Lexers::LilyPond do
       }
     end
 
-    it 'recognizes English pitches' do
+    it 'recognizes Norwegian/Swedish altered pitches' do
+      %w( ciss dississ fess gessess ).each { |pitch|
+        assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]
+      }
+    end
+
+    it 'recognizes English altered pitches' do
       %w( af bflat cff dflatflat esharp fx fs asharpsharp bss ).each { |pitch|
         assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]
       }
