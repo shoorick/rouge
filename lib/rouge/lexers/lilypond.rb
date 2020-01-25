@@ -46,7 +46,8 @@ module Rouge
         rule %r/\\(?:#{keywords_other.join('|')})\b/, Keyword::Reserved
         rule %r/\\\w+\b/, Keyword
 
-        rule %r/[\[\]\{\}\(\)',\/<>]/, Punctuation # TODO split rule
+        rule %r/[=\+]/, Operator
+        rule %r/[\[\]\{\}\(\)'\.,\/<>\-]/, Punctuation # TODO split rule
 
         # http://lilypond.org/doc/v2.18/Documentation/notation/writing-pitches
         # North letters
