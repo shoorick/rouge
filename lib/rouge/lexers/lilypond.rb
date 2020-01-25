@@ -48,6 +48,9 @@ module Rouge
 
         rule %r/[\[\]\{\}\(\)',\/<>]/, Punctuation # TODO split rule
 
+        # http://lilypond.org/doc/v2.18/Documentation/notation/writing-pitches
+        rule %r/(?:[a-h](?:[ie]s){,2}|[ae]s)[',]*(?![a-z])/, Str::Symbol
+
         rule %r/#'\w[\w\-]*?"/, Str::Single
         rule %r/#?".*?"/, Str::Double
         rule %r(##[tf]\b), Keyword::Constant
