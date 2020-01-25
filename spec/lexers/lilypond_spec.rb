@@ -31,6 +31,32 @@ describe Rouge::Lexers::LilyPond do
       assert_tokens_equal '|', ['Punctuation', '|']
     end
 
+    # Do not work yet
+    #it 'recognizes short dynamic signs' do
+      #['<', '!', '>'].each { |dynamics|
+        #assert_tokens_equal "\\#{dynamics}", ['Keyword.Constant', "\\#{dynamics}"]
+      #}
+    #end
+
+    it 'recognizes dynamic change' do
+      %w(
+        cresc crescHairpin crescTextCresc
+        decresc dim dimHairpin dimTextDecresc dimTextDim
+      ).each { |dynamics|
+        assert_tokens_equal "\\#{dynamics}", ['Keyword.Constant', "\\#{dynamics}"]
+      }
+    end
+
+    it 'recognizes dynamic values' do
+      %w(
+        ppppp pppp ppp pp p mp
+        mf f ff fff ffff fffff
+        fp sf sff sp spp sfz rfz
+      ).each { |dynamics|
+        assert_tokens_equal "\\#{dynamics}", ['Keyword.Constant', "\\#{dynamics}"]
+      }
+    end
+
     it 'recognizes Dutch/Finnish/German pitches' do
       %w( a as aeses b h his c es eis g ).each { |pitch|
         assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]

@@ -35,6 +35,13 @@ module Rouge
         Score Staff time times version
       )
 
+      # < ! >
+      dynamics = %w(
+        cresc crescHairpin crescTextCresc
+        decresc dim dimHairpin dimTextDecresc dimTextDim
+        ppppp pppp ppp pp p mp mf f ff fff ffff fffff fp sf sff sp spp sfz rfz
+      )
+
       state :pitch do
         # http://lilypond.org/doc/v2.18/Documentation/notation/writing-pitches
         # North letters
@@ -50,6 +57,10 @@ module Rouge
 
       state :keyword do
         rule %r/\\new\b/, Keyword::Declaration
+
+        rule %r/\\(?:#{dynamics.join('|')})\b/, Keyword::Constant
+        rule %r/\\[<!>]\b/, Keyword::Constant
+
         rule %r/\\(?:#{keywords_tokens.join('|')})\b/, Keyword::Reserved
         rule %r/\\(?:#{keywords_on_off.join('|')})O(?:n|ff)\b/, Keyword::Reserved
         rule %r/\\(?:#{keywords_up_down_neutral.join('|')})(?:Up|Down|Neutral)\b/, Keyword::Reserved
@@ -82,10 +93,10 @@ module Rouge
 
       state :root do
         rule %r/\\(?:addlyrics|lyricmode)\s*\{/, Keyword::Declaration, :lyric
-        rule %r/\\\w+\b/, Keyword
 
         mixin :note
         mixin :generic
+        rule %r/\\\w+\b/, Keyword
       end
     end
   end
