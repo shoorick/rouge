@@ -27,7 +27,7 @@ describe Rouge::Lexers::LilyPond do
       assert_tokens_equal '% comment', ['Comment.Single', '% comment']
     end
 
-    it 'recognizes German pitches' do
+    it 'recognizes Dutch/Finnish/German pitches' do
       %w( a as aeses b h his c es eis g ).each { |pitch|
         assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]
       }
@@ -35,6 +35,24 @@ describe Rouge::Lexers::LilyPond do
 
     it 'recognizes English pitches' do
       %w( af bflat cff dflatflat esharp fs asharpsharp bss ).each { |pitch|
+        assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]
+      }
+    end
+
+    it 'recognizes syllable pitches' do
+      %w( do re mi fa sol la si ).each { |pitch|
+        assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]
+      }
+    end
+
+    it 'recognizes Catalan/Italian/French altered pitches' do
+      %w( dod reb miss fadd solbb sib ).each { |pitch|
+        assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]
+      }
+    end
+
+    it 'recognizes Flemish double sharpened pitches' do
+      %w( dokk mikk ).each { |pitch|
         assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]
       }
     end
