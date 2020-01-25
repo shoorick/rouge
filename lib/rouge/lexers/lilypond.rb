@@ -63,7 +63,7 @@ module Rouge
         mixin :keyword
 
         rule %r/[=\+]/, Operator
-        rule %r/[\[\]\{\}\(\)'\.,\/<>\-~\?!]/, Punctuation # TODO split rule
+        rule %r/[\[\]\{\}\(\)'\.,\/<>\-~\?!\|]/, Punctuation # TODO split rule
 
         rule %r/#'\w[\w\-]*?"/, Str::Single
         rule %r/#?".*?"/, Str::Double

@@ -27,6 +27,10 @@ describe Rouge::Lexers::LilyPond do
       assert_tokens_equal '% comment', ['Comment.Single', '% comment']
     end
 
+    it 'recognizes bar line "|"' do
+      assert_tokens_equal '|', ['Punctuation', '|']
+    end
+
     it 'recognizes Dutch/Finnish/German pitches' do
       %w( a as aeses b h his c es eis g ).each { |pitch|
         assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]
