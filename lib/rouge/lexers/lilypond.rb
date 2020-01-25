@@ -14,10 +14,10 @@ module Rouge
       # see LilyPond source: lily/parser.yy
       # Keyword tokens with plain escaped name
       keywords_tokens = %w(
-        accepts addlyrics alias alternative book bookpart change chordmode
+        accepts alias alternative book bookpart change chordmode
         chords consists context default defaultchild denies description
         drummode drums etc figuremode figures header version-error layout
-        lyricmode lyrics lyricsto markup markuplist midi name notemode override
+        lyrics lyricsto markup markuplist midi name notemode override
         paper remove repeat rest revert score score-lines sequential set
         simultaneous tempo type unset with
       )
@@ -48,21 +48,22 @@ module Rouge
         # TODO add length
       end
 
-      state :root do
-        rule %r/%.*$/,       Comment::Single
-        rule %r/%\{.*?\}%/m, Comment::Multiline
-
+      state :keyword do
         rule %r/\\new\b/, Keyword::Declaration
         rule %r/\\(?:#{keywords_tokens.join('|')})\b/, Keyword::Reserved
         rule %r/\\(?:#{keywords_on_off.join('|')})O(?:n|ff)\b/, Keyword::Reserved
         rule %r/\\(?:#{keywords_up_down_neutral.join('|')})(?:Up|Down|Neutral)\b/, Keyword::Reserved
         rule %r/\\(?:#{keywords_other.join('|')})\b/, Keyword::Reserved
-        rule %r/\\\w+\b/, Keyword
+      end
+
+      state :generic do
+        rule %r/%.*$/,       Comment::Single
+        rule %r/%\{.*?\}%/m, Comment::Multiline
+
+        mixin :keyword
 
         rule %r/[=\+]/, Operator
         rule %r/[\[\]\{\}\(\)'\.,\/<>\-]/, Punctuation # TODO split rule
-
-        mixin :note
 
         rule %r/#'\w[\w\-]*?"/, Str::Single
         rule %r/#?".*?"/, Str::Double
@@ -70,6 +71,21 @@ module Rouge
         rule %r/[a-z]\w*/i, Name
         rule %r/#?[+\-]?\d+(?:\.\d+)?/, Num
         rule %r/\s+/m, Text::Whitespace
+      end
+
+      state :lyric do
+        mixin :generic
+        rule %r/\}/, Keyword::Declaration, :pop!
+        rule %r/--/, Punctuation
+        rule %r/.+/, Text # non Latin letters too
+      end
+
+      state :root do
+        rule %r/\\(?:addlyrics|lyricmode)\s*\{/, Keyword::Declaration, :lyric
+        rule %r/\\\w+\b/, Keyword
+
+        mixin :note
+        mixin :generic
       end
     end
   end
