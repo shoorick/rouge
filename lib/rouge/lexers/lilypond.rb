@@ -39,10 +39,10 @@ module Rouge
         rule %r/%.*$/,       Comment::Single
         rule %r/%\{.*?\}%/m, Comment::Multiline
 
-        rule %r/\\(new)\b/, Keyword::Declaration
+        rule %r/\\new\b/, Keyword::Declaration
         rule %r/\\(?:#{keywords_tokens.join('|')})\b/, Keyword::Reserved
-        rule %r/\\(?:#{keywords_on_off.join('|')})O(n|ff)\b/, Keyword::Reserved
-        rule %r/\\(?:#{keywords_up_down_neutral.join('|')})(Up|Down|Neutral)\b/, Keyword::Reserved
+        rule %r/\\(?:#{keywords_on_off.join('|')})O(?:n|ff)\b/, Keyword::Reserved
+        rule %r/\\(?:#{keywords_up_down_neutral.join('|')})(?:Up|Down|Neutral)\b/, Keyword::Reserved
         rule %r/\\(?:#{keywords_other.join('|')})\b/, Keyword::Reserved
         rule %r/\\\w+\b/, Keyword
 
@@ -53,9 +53,9 @@ module Rouge
 
         rule %r/#'\w[\w\-]*?"/, Str::Single
         rule %r/#?".*?"/, Str::Double
-        rule %r(##[tf]\b), Keyword::Constant
+        rule %r/##[tf]\b/, Keyword::Constant
         rule %r/[a-z]\w*/i, Name
-        rule %r/#?[+\-]?\d+(\.\d+)?/, Num
+        rule %r/#?[+\-]?\d+(?:\.\d+)?/, Num
         rule %r/\s+/m, Text::Whitespace
       end
     end
