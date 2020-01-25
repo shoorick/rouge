@@ -34,7 +34,7 @@ describe Rouge::Lexers::LilyPond do
     end
 
     it 'recognizes English pitches' do
-      %w( af bflat cff dflatflat esharp fs asharpsharp bss ).each { |pitch|
+      %w( af bflat cff dflatflat esharp fx fs asharpsharp bss ).each { |pitch|
         assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]
       }
     end
@@ -45,8 +45,8 @@ describe Rouge::Lexers::LilyPond do
       }
     end
 
-    it 'recognizes Catalan/Italian/French altered pitches' do
-      %w( dod reb miss fadd solbb sib ).each { |pitch|
+    it 'recognizes Catalan/French/Italian/Spanish altered pitches' do
+      %w( dod reb miss fax fadd solbb sib ).each { |pitch|
         assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]
       }
     end
