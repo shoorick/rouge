@@ -63,9 +63,9 @@ module Rouge
       state :pitch do
         # http://lilypond.org/doc/v2.18/Documentation/notation/writing-pitches
         # North letters
-        rule %r/[a-h](?:(?:[ie](?:h|ss?)|f(?:lat)?|s(?:harp)?){,2}|x?)[',]*(?![a-z])/, Str::Symbol
+        rule %r/[a-h](([ie](h|ss?)|f(lat)?|s(harp)?){,2}|x?)[',]*(?![a-z])/, Str::Symbol
         # South syllables
-        rule %r/(?:do|re|mi|fa|sol|la|si)(?:[bdks]{,2}|x?)[',]*(?![a-z])/, Str::Symbol
+        rule %r/(do|re|mi|fa|sol|la|si)([bdks]{,2}|x?)[',]*(?![a-z])/, Str::Symbol
         # Rests and skips
         rule %r/[Rrs](?![a-z])/, Str::Symbol
       end
@@ -136,7 +136,7 @@ module Rouge
         rule %r/#?".*?"/m, Str::Double
         rule %r/##[tf]\b/, Keyword::Constant
         rule %r/[a-z]\w*/i, Name
-        rule %r/#?[+\-]?\d+(?:\.\d+)?/, Num
+        rule %r/#?[+\-]?\d+(\.\d+)?/, Num
       end
 
       state :lyric do
@@ -149,7 +149,7 @@ module Rouge
       end
 
       state :root do
-        rule %r/\\(?:addlyrics|lyricmode)\s*\{/, Keyword::Declaration, :lyric
+        rule %r/\\(addlyrics|lyricmode)\s*\{/, Keyword::Declaration, :lyric
         #rule %r/<(?!<)/, Punctuation, :chord
 
         mixin :note
