@@ -62,9 +62,13 @@ module Rouge
         rule %r/[Rrs](?![a-z])/, Str::Symbol
       end
 
+      state :duration do
+        rule %r/(1|2|4|8|16|32|64|128|256)\.{,3}(\s*\*\s*\d+)?/, Num
+      end
+
       state :note do
         mixin :pitch
-        # TODO add duration
+        mixin :duration
       end
 
       state :keyword do
