@@ -150,7 +150,7 @@ module Rouge
 
       state :root do
         rule %r/\\(addlyrics|lyricmode)\s*\{/, Keyword::Declaration, :lyric
-        #rule %r/<(?!<)/, Punctuation, :chord
+        rule %r/<(?!<)/, Punctuation, :chord
 
         mixin :note
         mixin :generic
