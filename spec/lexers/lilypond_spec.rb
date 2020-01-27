@@ -64,6 +64,10 @@ describe Rouge::Lexers::LilyPond do
       }
     end
 
+    it 'recognizes #UPPERCASE constant' do
+      assert_tokens_equal "#DOWN", ['Keyword.Constant', "#DOWN"]
+    end
+
     it 'recognizes Dutch/Finnish/German pitches' do
       %w( a as aeses b h his c es eis g ).each { |pitch|
         assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]
