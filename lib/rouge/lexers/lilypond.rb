@@ -114,7 +114,7 @@ module Rouge
         rule %r/[\[\]\{\}\(\)'\.,\/<>\-~\?!\|]/, Punctuation # TODO split rule
 
         rule %r/#'\w[\w\-]*?"/, Str::Single
-        rule %r/#?".*?"/, Str::Double
+        rule %r/#?".*?"/m, Str::Double
         rule %r/##[tf]\b/, Keyword::Constant
         rule %r/[a-z]\w*/i, Name
         rule %r/#?[+\-]?\d+(?:\.\d+)?/, Num
