@@ -130,7 +130,8 @@ module Rouge
 
         rule %r/(#')?[a-z][a-z\-]*(?=\s*=)/i, Name::Variable
         rule %r/[=\+]/, Operator
-        rule %r/[\[\]\{\}\(\)'\.,\/<>\-~\?!\|]/, Punctuation # TODO split rule
+        rule %r/([\\\/<>]){2}/, Punctuation
+        rule %r/[\[\]\{\}\(\)'\.,\/\-~\?!\|]/, Punctuation # TODO split rule
 
         rule %r/#'\w[\w\-]*?"/, Str::Single
         rule %r/#?".*?"/m, Str::Double
