@@ -13,34 +13,44 @@ module Rouge
 
       # see LilyPond source: lily/parser.yy
       # Keyword tokens with plain escaped name
-      keywords_tokens = %w(
-        accepts alias alternative book bookpart change chordmode
-        chords consists context default defaultchild denies description
-        drummode drums etc figuremode figures header version-error layout
-        lyrics lyricsto markup markuplist midi name notemode override
-        paper remove repeat rest revert score score-lines sequential set
-        simultaneous tempo type unset with
-      )
+      def self.keywords_tokens
+        @keywords_tokens ||= Set.new %w(
+          accepts alias alternative book bookpart change chordmode
+          chords consists context default defaultchild denies description
+          drummode drums etc figuremode figures header version-error layout
+          lyrics lyricsto markup markuplist midi name notemode override
+          paper remove repeat rest revert score score-lines sequential set
+          simultaneous tempo type unset with
+        )
+      end
 
-      keywords_on_off = %w(
-        cadenza shift sostenuto sustain
-      )
+      def self.keywords_on_off
+        @keywords_on_off ||= Set.new %w(
+          cadenza shift sostenuto sustain
+        )
+      end
 
-      keywords_up_down_neutral = %w(
-        arpeggio dots dynamic phrasingSlur slur stem tie tuplet
-      )
+      def self.keywords_up_down_neutral
+        @keywords_up_down_neutral ||= Set.new %w(
+          arpeggio dots dynamic phrasingSlur slur stem tie tuplet
+        )
+      end
 
-      keywords_other = %w(
-        bar clef glissando key language major minor omit once relative remove
-        Score Staff time times version
-      )
+      def self.keywords_other
+        @keywords_other ||= Set.new %w(
+          bar clef glissando key language major minor omit once relative remove
+          Score Staff time times version
+        )
+      end
 
       # < ! >
-      dynamics = %w(
-        cresc crescHairpin crescTextCresc
-        decresc dim dimHairpin dimTextDecresc dimTextDim
-        ppppp pppp ppp pp p mp mf f ff fff ffff fffff fp sf sff sp spp sfz rfz
-      )
+      def self.dynamics
+        @dynamics ||= Set.new %w(
+          cresc crescHairpin crescTextCresc
+          decresc dim dimHairpin dimTextDecresc dimTextDim
+          ppppp pppp ppp pp p mp mf f ff fff ffff fffff fp sf sff sp spp sfz rfz
+        )
+      end
 
       state :pitch do
         # http://lilypond.org/doc/v2.18/Documentation/notation/writing-pitches
@@ -52,19 +62,46 @@ module Rouge
 
       state :note do
         mixin :pitch
-        # TODO add length
+        # TODO add duration
       end
 
       state :keyword do
         rule %r/\\new\b/, Keyword::Declaration
 
-        rule %r/\\(?:#{dynamics.join('|')})\b/, Keyword::Constant
+        # dynamic signs: \<
         rule %r/\\[<!>]\b/, Keyword::Constant
 
-        rule %r/\\(?:#{keywords_tokens.join('|')})\b/, Keyword::Reserved
-        rule %r/\\(?:#{keywords_on_off.join('|')})O(?:n|ff)\b/, Keyword::Reserved
-        rule %r/\\(?:#{keywords_up_down_neutral.join('|')})(?:Up|Down|Neutral)\b/, Keyword::Reserved
-        rule %r/\\(?:#{keywords_other.join('|')})\b/, Keyword::Reserved
+        # \cadenzaOn
+        rule %r/\\(\w+)O(n|ff)\b/ do |m|
+          if self.class.keywords_on_off.include?(m[1])
+            token Keyword::Reserved
+          end
+        end
+
+        # \slurUp
+        rule %r/\\(\w+)(Up|Down|Neutral)\b/ do |m|
+          if self.class.keywords_up_down_neutral.include?(m[1])
+            token Keyword::Reserved
+          end
+        end
+
+        # \version
+        rule %r/\\(\w+)\b/ do |m|
+          if self.class.dynamics.include?(m[1])
+            token Keyword::Constant
+          elsif self.class.keywords_tokens.include?(m[1])
+            token Keyword::Reserved
+          elsif self.class.keywords_other.include?(m[1])
+            token Keyword::Reserved
+          else
+            token Keyword
+          end
+        end
+
+        #rule %r/\\(?:#{keywords_tokens.join('|')})\b/, Keyword::Reserved
+        #rule %r/\\(?:#{keywords_on_off.join('|')})O(?:n|ff)\b/, Keyword::Reserved
+        #rule %r/\\(?:#{keywords_up_down_neutral.join('|')})(?:Up|Down|Neutral)\b/, Keyword::Reserved
+        #rule %r/\\(?:#{keywords_other.join('|')})\b/, Keyword::Reserved
       end
 
       state :generic do
@@ -96,7 +133,6 @@ module Rouge
 
         mixin :note
         mixin :generic
-        rule %r/\\\w+\b/, Keyword
       end
     end
   end
