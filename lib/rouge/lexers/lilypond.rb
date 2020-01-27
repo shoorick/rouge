@@ -71,6 +71,12 @@ module Rouge
         mixin :duration
       end
 
+      state :chord do
+        mixin :pitch
+        mixin :generic
+        rule %r/>(?!>)/, Punctuation, :pop!
+      end
+
       state :keyword do
         rule %r/\\new\b/, Keyword::Declaration
 
@@ -136,6 +142,7 @@ module Rouge
 
       state :root do
         rule %r/\\(?:addlyrics|lyricmode)\s*\{/, Keyword::Declaration, :lyric
+        #rule %r/<(?!<)/, Punctuation, :chord
 
         mixin :note
         mixin :generic
