@@ -68,6 +68,11 @@ describe Rouge::Lexers::LilyPond do
       assert_tokens_equal "#DOWN", ['Keyword.Constant', "#DOWN"]
     end
 
+    #Doesn't work yet - got Name instead of Literal.String.Symbol
+    #it 'recognizes GrandStaff symbol' do
+      #assert_tokens_equal "GrandStaff", ['Literal.String.Symbol', "GrandStaff"]
+    #end
+
     it 'recognizes Dutch/Finnish/German pitches' do
       %w( a as aeses b h his c es eis g ).each { |pitch|
         assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]
