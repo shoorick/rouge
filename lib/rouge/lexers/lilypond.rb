@@ -58,6 +58,8 @@ module Rouge
         rule %r/[a-h](?:(?:[ie](?:h|ss?)|f(?:lat)?|s(?:harp)?){,2}|x?)[',]*(?![a-z])/, Str::Symbol
         # South syllables
         rule %r/(?:do|re|mi|fa|sol|la|si)(?:[bdks]{,2}|x?)[',]*(?![a-z])/, Str::Symbol
+        # Rests and skips
+        rule %r/[Rrs](?![a-z])/, Str::Symbol
       end
 
       state :note do
