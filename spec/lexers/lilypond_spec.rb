@@ -39,12 +39,11 @@ describe Rouge::Lexers::LilyPond do
       assert_tokens_equal '\slurUp', ['Keyword.Reserved', '\slurUp']
     end
 
-    # Do not work yet
-    #it 'recognizes short dynamic signs' do
-      #['<', '!', '>'].each { |dynamics|
-        #assert_tokens_equal "\\#{dynamics}", ['Keyword.Constant', "\\#{dynamics}"]
-      #}
-    #end
+    it 'recognizes short dynamic signs' do
+      ['<', '!', '>'].each { |dynamics|
+        assert_tokens_equal "\\#{dynamics}", ['Keyword.Constant', "\\#{dynamics}"]
+      }
+    end
 
     it 'recognizes dynamic change' do
       %w(

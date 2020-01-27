@@ -91,7 +91,7 @@ module Rouge
         rule %r/\\new\b/, Keyword::Declaration
 
         # dynamic signs: \<
-        rule %r/\\[<!>]\b/, Keyword::Constant
+        rule %r/\\([<!>])(?!\1)/, Keyword::Constant
 
         # on/off commands: \cadenzaOn
         rule %r/\\(\w+)O(n|ff)\b/ do |m|
