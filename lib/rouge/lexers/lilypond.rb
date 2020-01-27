@@ -52,6 +52,10 @@ module Rouge
         )
       end
 
+      state :whitespace do
+        rule %r/\s+/m, Text::Whitespace
+      end
+
       state :pitch do
         # http://lilypond.org/doc/v2.18/Documentation/notation/writing-pitches
         # North letters
@@ -67,11 +71,13 @@ module Rouge
       end
 
       state :note do
+        mixin :whitespace
         mixin :pitch
         mixin :duration
       end
 
       state :chord do
+        mixin :whitespace
         mixin :pitch
         mixin :generic
         rule %r/>(?!>)/, Punctuation, :pop!
@@ -117,10 +123,11 @@ module Rouge
       end
 
       state :generic do
+        mixin :whitespace
+        mixin :keyword
+
         rule %r/%.*$/,       Comment::Single
         rule %r/%\{.*?\}%/m, Comment::Multiline
-
-        mixin :keyword
 
         rule %r/[=\+]/, Operator
         rule %r/[\[\]\{\}\(\)'\.,\/<>\-~\?!\|]/, Punctuation # TODO split rule
@@ -130,12 +137,12 @@ module Rouge
         rule %r/##[tf]\b/, Keyword::Constant
         rule %r/[a-z]\w*/i, Name
         rule %r/#?[+\-]?\d+(?:\.\d+)?/, Num
-        rule %r/\s+/m, Text::Whitespace
       end
 
       state :lyric do
-        mixin :generic
         rule %r/\}/, Keyword::Declaration, :pop!
+        mixin :generic
+
         rule %r/--/, Punctuation
         rule %r/__/, Punctuation
         rule %r/.+/, Text # non Latin letters too
