@@ -5,11 +5,19 @@ module Rouge
   module Lexers
     class LilyPond < RegexLexer
       title "LilyPond"
-      desc "Markup language for music engraving"
+      desc "LilyPond is software for music engraving and its Markup language"
       tag 'lilypond'
       aliases 'ly'
       filenames '*.ly'
       mimetypes 'text/x-lilypond'
+
+      state :root do
+        rule %r/\\(addlyrics|lyricmode)\s*\{/, Keyword::Declaration, :lyric
+        rule %r/<(?!<)/, Punctuation, :chord
+
+        mixin :note
+        mixin :generic
+      end
 
       # see LilyPond source: lily/parser.yy
       # Keyword tokens with plain escaped name
@@ -62,9 +70,9 @@ module Rouge
 
       state :pitch do
         # http://lilypond.org/doc/v2.18/Documentation/notation/writing-pitches
-        # North letters
+        # Northern letters
         rule %r/[a-h](([ie](h|ss?)|f(lat)?|s(harp)?){,2}|x?)[',]*(?![a-z])/, Str::Symbol
-        # South syllables
+        # Southern syllables
         rule %r/(do|re|mi|fa|sol|la|si)([bdks]{,2}|x?)[',]*(?![a-z])/, Str::Symbol
         # Rests and skips
         rule %r/[Rrs](?![a-z])/, Str::Symbol
@@ -133,7 +141,7 @@ module Rouge
         rule %r/([\\\/<>]){2}/, Punctuation
         rule %r/[\[\]\{\}\(\)'\.,\/\-~\?!\|]/, Punctuation # TODO split rule
 
-        rule %r/#'\w[\w\-]*?"/, Str::Single
+        #rule %r/#'\w[\w\-]*?/, Str::Single
         rule %r/#?".*?"/m, Str::Double
         rule %r/##[tf]\b/, Keyword::Constant
         rule %r/#[A-Z]+\b/, Keyword::Constant
@@ -148,14 +156,6 @@ module Rouge
         rule %r/--/, Punctuation
         rule %r/__/, Punctuation
         rule %r/.+/, Text # non Latin letters too
-      end
-
-      state :root do
-        rule %r/\\(addlyrics|lyricmode)\s*\{/, Keyword::Declaration, :lyric
-        rule %r/<(?!<)/, Punctuation, :chord
-
-        mixin :note
-        mixin :generic
       end
     end
   end
