@@ -31,6 +31,14 @@ describe Rouge::Lexers::LilyPond do
       assert_tokens_equal '|', ['Punctuation', '|']
     end
 
+    it 'recognizes variable \altoVoice' do
+      assert_tokens_equal '\altoVoice', ['Name.Variable', '\altoVoice']
+    end
+
+    it 'recognizes command \slurUp' do
+      assert_tokens_equal '\slurUp', ['Keyword.Reserved', '\slurUp']
+    end
+
     # Do not work yet
     #it 'recognizes short dynamic signs' do
       #['<', '!', '>'].each { |dynamics|

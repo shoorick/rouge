@@ -38,8 +38,12 @@ module Rouge
 
       def self.keywords_other
         @keywords_other ||= Set.new %w(
-          bar clef glissando key language major minor omit once relative remove
-          Score Staff time times version
+          bar break breathe clef glissando fermata key language major minor
+          omit once relative remove Score Staff time times version
+          bold italic
+          hspace vspace
+          large larger small
+          mm cm in
         )
       end
 
@@ -89,21 +93,21 @@ module Rouge
         # dynamic signs: \<
         rule %r/\\[<!>]\b/, Keyword::Constant
 
-        # \cadenzaOn
+        # on/off commands: \cadenzaOn
         rule %r/\\(\w+)O(n|ff)\b/ do |m|
           if self.class.keywords_on_off.include?(m[1])
             token Keyword::Reserved
           end
         end
 
-        # \slurUp
+        # directions: \slurUp
         rule %r/\\(\w+)(Up|Down|Neutral)\b/ do |m|
           if self.class.keywords_up_down_neutral.include?(m[1])
             token Keyword::Reserved
           end
         end
 
-        # \version
+        # backslash prepended words: \version
         rule %r/\\(\w+)\b/ do |m|
           if self.class.dynamics.include?(m[1])
             token Keyword::Constant
@@ -112,14 +116,9 @@ module Rouge
           elsif self.class.keywords_other.include?(m[1])
             token Keyword::Reserved
           else
-            token Keyword
+            token Name::Variable
           end
         end
-
-        #rule %r/\\(?:#{keywords_tokens.join('|')})\b/, Keyword::Reserved
-        #rule %r/\\(?:#{keywords_on_off.join('|')})O(?:n|ff)\b/, Keyword::Reserved
-        #rule %r/\\(?:#{keywords_up_down_neutral.join('|')})(?:Up|Down|Neutral)\b/, Keyword::Reserved
-        #rule %r/\\(?:#{keywords_other.join('|')})\b/, Keyword::Reserved
       end
 
       state :generic do
@@ -129,6 +128,7 @@ module Rouge
         rule %r/%.*$/,       Comment::Single
         rule %r/%\{.*?\}%/m, Comment::Multiline
 
+        rule %r/(#')?[a-z][a-z\-]*(?=\s*=)/i, Name::Variable
         rule %r/[=\+]/, Operator
         rule %r/[\[\]\{\}\(\)'\.,\/<>\-~\?!\|]/, Punctuation # TODO split rule
 
