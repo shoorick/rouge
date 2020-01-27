@@ -73,6 +73,32 @@ describe Rouge::Lexers::LilyPond do
       #assert_tokens_equal "GrandStaff", ['Literal.String.Symbol', "GrandStaff"]
     #end
 
+    #it 'parses short melody' do
+      #melody = "melody = \relative c' { d8 r e a d }"
+      #assert_tokens_equal melody, ['Name.Variable', 'melody'],
+                                  #['Text.Whitespace', ' '],
+                                  #['Operator', '='],
+                                  #['Text.Whitespace', ' '],
+                                  #['Keyword.Reserved', '\relative'],
+                                  #['Text.Whitespace', ' '],
+                                  #['Literal.String.Symbol', "c'"],
+                                  #['Text.Whitespace', ' '],
+                                  #['Punctuation', '{'],
+                                  #['Text.Whitespace', ' '],
+                                  #['Literal.String.Symbol', 'd'],
+                                  #['Literal.Number', '8'],
+                                  #['Text.Whitespace', ' '],
+                                  #['Literal.String.Symbol', 'r'],
+                                  #['Text.Whitespace', ' '],
+                                  #['Literal.String.Symbol', 'e'],
+                                  #['Text.Whitespace', ' '],
+                                  #['Literal.String.Symbol', 'a'],
+                                  #['Text.Whitespace', ' '],
+                                  #['Literal.String.Symbol', 'd'],
+                                  #['Text.Whitespace', ' '],
+                                  #['Punctuation', '}']
+    #end
+
     it 'recognizes Dutch/Finnish/German pitches' do
       %w( a as aeses b h his c es eis g ).each { |pitch|
         assert_tokens_equal pitch, ['Literal.String.Symbol', pitch]

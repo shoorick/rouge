@@ -156,8 +156,12 @@ module Rouge
         rule %r/%.*$/,       Comment::Single
         rule %r/%\{.*?\}%/m, Comment::Multiline
 
-        rule %r/(#')?[a-z][a-z\-]*(?=\s*=)/i, Name::Variable
-        rule %r/[=\+]/, Operator
+        rule %r/((?:#')?[a-z][a-z\-]*)(\s*)(=)/ do
+          groups Name::Variable, Text::Whitespace, Operator
+        end
+
+        rule %r/[\+\*]/, Operator
+
         rule %r/([\\\/<>]){2}/, Punctuation
         rule %r/[\[\]\{\}\(\)'\.,\/\-~\?!\|^_]/, Punctuation # TODO split rule
 
