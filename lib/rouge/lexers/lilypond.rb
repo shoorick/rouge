@@ -137,6 +137,7 @@ module Rouge
         mixin :generic
         rule %r/\}/, Keyword::Declaration, :pop!
         rule %r/--/, Punctuation
+        rule %r/__/, Punctuation
         rule %r/.+/, Text # non Latin letters too
       end
 
